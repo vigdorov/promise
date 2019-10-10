@@ -1,0 +1,22 @@
+{
+  "name": "promise-project",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "lite-server -c bs-config.json"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vigdorov/promise.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/vigdorov/promise/issues"
+  },
+  "homepage": "https://github.com/vigdorov/promise#readme",
+  "devDependencies": {
+    "lite-server": "^2.5.4"
+  }
+}
