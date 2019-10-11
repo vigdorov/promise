@@ -22,13 +22,7 @@ class PromiseClass {
   }
 }
 
-const userList = new PromiseClass((resolve, reject) => {
-  fetch('https://reqres.in/api/users')
-    .then( r => r.json())
-    .then( data => {
-      resolve(data);
-    });
-});
+const userList = fetch('https://reqres.in/api/users');
 
 const createCard = ({ email, first_name: name, avatar}) => {
   return `
@@ -47,22 +41,66 @@ const generateCard = (list) => {
   document.body.innerHTML = cardList.join('');
 };
 
+const rating = [1, 3, 4, 5, 6, 32, 2];
+
 userList
   .then((response) => {
-    return response.data
+    if (response.ok) {
+      return response.json()
+        .catch(() => response.text());
+    }
+    if (response.status === 401) {
+      // реврешнуть токен
+    }
   })
-  .then( (data) => {
-    generateCard(data);
+  .catch((error) => console.error(error))
+  .then((response) => {
+    if (typeof response === 'string') {
+      return response;
+    }
+    return response.data;
   })
-  .catch(() => {});
+  .then((userList) => {
+    throw new Error('hui s maslom');
+    return userList.map( (user, i) => {
+      return { ...user, rating: rating[i] };
+    })
+  })
+  .catch((error) => {
+    console.log(error);
+    return [];
+  })
+  .then(users => {
+    console.log(users);
+  });
 
 
-fetch('https://reqres.in/api/users', {
-  method: 'POST',
-  body: JSON.stringify({
-    name: 'morpheus',
-    job: 'leader'
-  })
-})
-  .then(r => r.json())
-  .then(answer => console.log(answer));
+class Collection {
+  constructor (array) {
+    let collection = [...array];
+
+    this.show = () => {
+      console.log( collection );
+      return this;
+    };
+
+    this.increaseAge = (value) => {
+      collection = collection.map( item => {
+        return { ...item, age: item.age + value };
+      });
+      return this;
+    };
+  }
+}
+
+const chefs = [
+  { name: 'Ivan', rating: 1, age: 45},
+  { name: 'Petr', rating: 8, age: 35},
+  { name: 'Huert', rating: 13, age: 21},
+  { name: 'Man', rating: 4, age: -3},
+];
+
+const chefCollection = new Collection(chefs);
+
+chefCollection.show().increaseAge(5).show().show().show();
+
